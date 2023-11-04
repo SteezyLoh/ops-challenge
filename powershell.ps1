@@ -4,40 +4,34 @@
 # Author:                       Scotty Jokon        
 # Date of latest revision:      10/27/2023
 # Purpose:                      bash loops
-# Sources:                      https://chat.openai.com
+# Sources:                      https://chat.openai.com COHORT
 
-# Output all events from the System event log that occurred in the last 24 hours to a file on your desktop named last_24.txt.
+# Print all active processes ordered by highest CPU time consumption at the top
+Get-Process | Sort-Object -Property CPU -Descending | Format-Table -AutoSize
 
-Get-WinEvent -LogName System -StartTime (Get-Date).AddDays(-1) | Out-File -FilePath "$env:USERPROFILE\Desktop\last_24.txt"
+# Print all active processes ordered by highest Process Identification Number at the top
+Get-Process | Sort-Object -Property Id -Descending | Format-Table -AutoSize
 
-# Output all "error" type events from the System event log to a file on your desktop named errors.txt
+# Print the top five active processes ordered by highest Working Set (WS(K)) at the top
+Get-Process | Sort-Object -Property WS -Descending | Select-Object -First 5 | Format-Table -AutoSize
 
-Get-WinEvent -LogName System -FilterHashTable @{LogName='System'; Level=2} | Out-File -FilePath "$env:USERPROFILE\Desktop\errors.txt"
-
-# Print to the screen all events with ID of 16 from the System event log
-
-Get-WinEvent -LogName System | Where-Object { $_.Id -eq 16 }
-
-# Print to the screen the most recent 20 entries in the System event log. 
-
-Get-WinEvent -LogName System -MaxEvents 20 | Format-Table -AutoSize
-
-# Print to the screen all the sources of the 500 most recent entries in the System event log. Ensure that the full lines are displayed (get rid of the ..... that shows in the text)
-Get-WinEvent -LogName System -MaxEvents 500 | Select-Object -ExpandProperty ProviderName | Format-Table -Wrap -AutoSize
-
-# Done
+# Start a browser process (Google Chrome, msedge) and open https://owasp.org/www-project-top-ten/
+Start-Process "chrome" "https://owasp.org/www-project-top-ten/"
+Start-Process "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" "https://owasp.org/www-project-top-ten/"
+Stop-Process -Name msedge
 
 
 
+# Start the process Notepad ten times using a for loop
+for ($i = 1; $i -le 10; $i++) {
+    Start-Process "notepad"
+}
+
+# Close all instances of Notepad (both of this commands work but I preffer the short one.
+Get-Process | Where-Object { $_.ProcessName -eq "notepad" } | ForEach-Object { Stop-Process -Id $_.Id }
+Get-Process -Name notepad | Stop-Process
 
 
+# Kill a process by its Process Identification Number (e.g., Google Chromem, msedge)
 
-
-
-
-
-
-
-
-
-# End
+$processPid = (Get-Process -Name "msedge").Id
