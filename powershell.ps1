@@ -4,7 +4,7 @@
 # Author:                       Scotty Jokon        
 # Date of latest revision:      10/27/2023
 # Purpose:                      bash loops
-# Sources:                      https://chat.openai.com COHORT
+# Sources:                      https://chat.openai.com COHORT Rodolfo Gonzalez
 
 # Print all active processes ordered by highest CPU time consumption at the top
 Get-Process | Sort-Object -Property CPU -Descending | Format-Table -AutoSize
